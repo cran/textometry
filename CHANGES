@@ -1,0 +1,25 @@
+CHANGES :
+del : data/corpus.tiny.cooccurrences.R : cooc not implemented
+del : R/cooccurrences.R : cooc not implemented
+del : man/corpus.tiny.cooccurrences.Rd : cooc not implemented
+del : man/cooccurrences.Rd : cooc not implemented
+del : R/pareto.R
+del : man/pareto.Rd
+
+del : Read-and-delete.me
+mov  : cgt75.R, cgt75.splitted.txt, cgt75.txt to tests directory
+maj : inst/CITATION : add Lise
+add : man/progression.Rd
+add : man/specificities.lexicon.new.Rd
+maj : man/specifites.Rd : fix specificities call
+maj : R/*.R : update authors
+maj : R/pareto.R : licence GPLv3
+del : tests/.RData : tmp file
+del : tests/authors.xls
+del : tests/ca.R : doesn't pass R check because of `table <- read.table("clipboard");`
+
+TODO : 
+inst/CITATION : = how quoting TXM
+
+SVN REPORT : 
+...

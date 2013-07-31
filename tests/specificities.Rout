@@ -1,0 +1,39 @@
+
+R Under development (unstable) (2013-07-29 r63455) -- "Unsuffered Consequences"
+Copyright (C) 2013 The R Foundation for Statistical Computing
+Platform: x86_64-unknown-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(textometry);
+> # checking that the output of specificities() remains the same...
+> data(robespierre); # loading the sample data set
+> specificities(robespierre);
+                D1      D2      D3      D4      D5      D6      D7      D8
+de          1.2477  2.6891 -0.5534  1.6471 -0.5096 -0.2909 -0.6132 -0.8098
+peuple      0.6161  1.1466 -0.6709 -4.1743  2.1122  1.2906 -0.7980  1.3632
+republique  0.9753  0.4424  0.6038  0.9023  0.4706 -1.2797 -2.2003  1.9736
+ennemi      1.2133  1.6778  0.3146  0.3091  0.3364 -0.5024 -2.0550  0.4965
+patrie     -4.2432 -0.4160  1.4491 -2.0903  0.6178 -0.3834  1.5961  0.8409
+others     -1.2657 -3.6429  0.3542 -0.5984 -0.5387  0.3333  1.2439 -0.5569
+                D9     D10
+de          0.3884 -2.2050
+peuple     -0.3977 -0.8410
+republique -0.5366 -0.6335
+ennemi     -0.3552 -0.4359
+patrie      0.2942  0.6414
+others      0.3377  2.4355
+> 
+> proc.time()
+   user  system elapsed 
+  0.220   0.012   0.227 

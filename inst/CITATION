@@ -1,0 +1,14 @@
+citHeader("To cite 'textometry' in publications use:")
+
+citEntry(entry="article",
+	 title="Textual Data Analysis Package used by the TXM Software ",
+         author=personList(as.person("Serge Heiden"), as.person("Sylvain Loiseau"), as.person("Matthieu Decorde"), as.person("Lise Vaudor")),
+	 journal="none",
+         volume="",
+         pages="",
+         year="2013",
+         url="http://textometrie.ens-lyon.fr/",
+         textVersion=paste("",
+                           "",
+                           "",
+                           "", sep=""))
