@@ -1,11 +1,11 @@
 0778ca4475c4d6f6c94231794d37f2d7 *CHANGES
-f41aba885172ea4edc1dfafd369c1609 *DESCRIPTION
+02569fc39c4d1552b0d32b79d97044bb *DESCRIPTION
 0ac9525e2abd539ebc8abe0ae579d460 *NAMESPACE
 4e4a2b12ebd597fd517e2610a761f63f *R/progression.R
 433d097f01ed313ae3e36ed089948b72 *R/specificities.R
 899c462684ce6580bd5fb275a0e23d99 *data/bfm.rda
 751cc5abae56024b431b1cf94873e82a *data/robespierre.rda
-3257661f2c5c9d909e9f6b2c34ec8e0e *inst/CITATION
+fdd964684a1e764a65ef64950a959be3 *inst/CITATION
 fa944ee9e47d7bf830f7da1c836145ba *man/bfm.Rd
 2562bc939f0861e271deec9540bbc40e *man/progression.Rd
 9b7785aef1cfbb01d2706da427be7fd4 *man/robespierre.Rd

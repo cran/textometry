@@ -1,14 +1,24 @@
 citHeader("To cite 'textometry' in publications use:")
 
-citEntry(entry="article",
-	 title="Textual Data Analysis Package used by the TXM Software ",
-         author=personList(as.person("Serge Heiden"), as.person("Sylvain Loiseau"), as.person("Matthieu Decorde"), as.person("Lise Vaudor")),
-	 journal="none",
-         volume="",
-         pages="",
-         year="2013",
-         url="http://textometrie.ens-lyon.fr/",
-         textVersion=paste("",
-                           "",
-                           "",
-                           "", sep=""))
+bibentry(bibtype = "Manual",
+title = "TXM Manual",
+author = person("TXM Team"),
+organization = "ICAR Laboratory, Lyon University & CNRS",
+address = "Lyon, France",
+year = 2013,
+url = "http://textometrie.ens-lyon.fr/?lang=en",
+textVersion="TXM Team (2013). TXM Manual. ICAR Laboratory, Lyon University & CNRS, Lyon, France. URL http://textometrie.ens-lyon.fr/?lang=en.")
+
+bibentry(bibtype = "InProceedings",
+title = "The TXM Platform: Building Open-Source Textual Analysis Software Compatible with the TEI Encoding Scheme",
+booktitle = "Proceedings of the 24th Pacific Asia Conference on Language, Information and Computation (PACLIC 24). 4-7 November 2010, Sendai",
+publisher = "Institute for Digital Enhancement of Cognitive Development, Waseda University",
+author = person("Heiden, Serge"),
+editor = "Ryo Otoguro, Kiyoshi Ishikawa",
+month = "nov",
+year = 2010,
+keywords = "xml-tei corpora ; search engine ; statistical analysis ; textometry ; open-source",
+pages = "389--398",
+url = "http://halshs.archives-ouvertes.fr/halshs-00549764/en",
+abstract = "This paper describes the rationale and design of an XML-TEI encoded corpora compatible analysis platform for text mining called TXM. The design of this platform is based on a synthesis of the best available algorithms in existing textometry software. It also relies on identifying the most relevant open-source technologies for processing textual resources encoded in XML and Unicode, for efficient full-text search on annotated corpora and for statistical data analysis. The architecture is based on a Java toolbox articulating a full-text search engine component with a statistical computing environment and with an original import environment able to process a large variety of data sources, including XML-TEI, and to apply embedded NLP tools to them. The platform is distributed as an open-source Eclipse project for developers and in the form of two demonstrator applications for end users: a standard application to install on a workstation and an online web application framework.",
+textVersion = "Heiden, S. (2010). The TXM Platform: Building Open-Source Textual Analysis Software Compatible with the TEI Encoding Scheme. In K. I. Ryo Otoguro (Ed.), 24th Pacific Asia Conference on Language, Information and Computation - PACLIC24 (p. 389-398). Institute for Digital Enhancement of Cognitive Development, Waseda University, Sendai, Japan.")
