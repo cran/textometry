@@ -21,6 +21,7 @@
 corpusname, Xmin, T, doCumulative, structurepositions, strutnames, graphtitle, bande) {
 	options(scipen=1000)
 
+	resultToReturn = list(); # contains density results; one per query
 	linestyle = 1
 	linewidth = 1
 
@@ -41,9 +42,12 @@ corpusname, Xmin, T, doCumulative, structurepositions, strutnames, graphtitle, b
 			x = positions[[i]]
 			if (length(x) > 0) {
 				d = density(x, bw=bande)
+				resultToReturn[[i]] = d
 				m = max(d[["y"]])
-			     if(maxY < m)
-				 	maxY <- m
+				if (maxY < m)
+					maxY <- m
+			} else {
+				resultToReturn[[i]] = 0
 			}
 		}
 		maxY=2*maxY
@@ -79,10 +83,10 @@ plot(x, y, type="s", xlab=paste("T = ", maxX), main = graphtitle, ylab="Occurren
 		            		  }
 		            		  else
 		            		  {
-plot(density(x, bw=bande), type="l", xlab=paste("T = ", maxX), graphtitle, ylab="Density", ylim=c(0, maxY), xlim=c(Xmin, maxX), pch=15, col=colors[i], lty=styles[i], lwd=widths[i], xaxs="i", yaxs="i")
+plot(resultToReturn[[i]], type="l", xlab=paste("T = ", maxX), graphtitle, ylab="Density", ylim=c(0, maxY), xlim=c(Xmin, maxX), pch=15, col=colors[i], lty=styles[i], lwd=widths[i], xaxs="i", yaxs="i")
 		            		  }
 		            	  }
-		            	  else #next draws
+		            	  else # next draws
 		            	  {
 		            		  if(doCumu)
 		            		  {
@@ -90,7 +94,7 @@ points(x, y, type="s", pch=15, col=colors[i], lty=styles[i], lwd=widths[i])
 		            		  }
 		            		  else
 		            		  {
-points(density(x, bw=bande), type="l", pch=15, col=colors[i], lty=styles[i], lwd=widths[i])
+points(resultToReturn[[i]], type="l", pch=15, col=colors[i], lty=styles[i], lwd=widths[i])
 		            		  }
 		            	  }
 		            	  rm(y)
@@ -99,11 +103,12 @@ points(density(x, bw=bande), type="l", pch=15, col=colors[i], lty=styles[i], lwd
 	}
 
 	# draw legend
-	for (i in 1:length(names))
-		names[i] = paste(names[i], length(positions[[i]]))
+	legendNames = names
+	for (i in 1:length(legendNames))
+		legendNames[i] = paste(legendNames[i], length(positions[[i]]))
 
 	if (draw > 0)
-		legend("topleft", names, inset = .02, col = colors, lty=styles, lwd=widths)
+		legend("topleft", legendNames, inset = .02, col = colors, lty=styles, lwd=widths)
 
 	# draw hist of struct
 	y = c()
@@ -114,4 +119,8 @@ points(density(x, bw=bande), type="l", pch=15, col=colors[i], lty=styles[i], lwd
 		}
 		points(structurepositions, y, type="h", ylim=c(0, maxY), xlim=c(Xmin, maxX))
 	}
+
+	if (length(resultToReturn) == length(names))
+		names(resultToReturn) = names
+	return(resultToReturn)
 }

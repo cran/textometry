@@ -54,8 +54,9 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
     spelog <- matrix(0, nrow=nrow(spe), ncol=ncol(spe));
     spelog[spe < 0] <- log10(-spe[spe < 0]);
     spelog[spe > 0] <- abs(log10(spe[spe >0]));
-    spelog[spe == 0] <- 0;
-    spelog[is.infinite(spe)] <- 0;
+    spelog[spe == 10] <- +Inf;
+    spelog[spe == -10] <- -Inf;
+    #spelog[is.infinite(spe)] <- 0; # cannot be infinite
     spelog <- round(spelog, digits=4);
     rownames(spelog) <- rownames(spe);
     colnames(spelog) <- colnames(spe);
@@ -121,13 +122,17 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
       specif_negative <- whiteDrawn <  independance;  # index of observed frequencies below the theoretic frequencies.
       specif_positive <- whiteDrawn >= independance;  # index of observed frequencies above the theoretic frequencies.
       
-      specif[specif_negative,i] <- -phyper (
+      negativeScores <- -phyper (
         whiteDrawn[specif_negative], white[specif_negative], black[specif_negative], drawn
       );
+negativeScores[negativeScores==0] = -10
+specif[specif_negative,i] <- negativeScores
       
-      specif[specif_positive,i] <- phyper_bis (
+      positiveScores <- phyper_bis (
         whiteDrawn[specif_positive], white[specif_positive], black[specif_positive], drawn
       );
+positiveScores[positiveScores==0] = 10
+specif[specif_positive,i] <- positiveScores
     }
 
     colnames(specif) <- colnames(lexicaltable);
@@ -136,21 +141,10 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
     return(specif);
   }
 
-`specificities.lexicon` <-
-  function(lexicon, sublexicon) {
-    spe <- specificities.lexicon.probabilities(lexicon, sublexicon);
-    spelog <- matrix(0, nrow=nrow(spe), ncol=ncol(spe));
-    spelog[spe < 0] <- log10(-spe[spe < 0]);
-    spelog[spe > 0] <- abs(log10(spe[spe >=0]));
-    spelog[spe == 0] <- 0;
-    spelog[is.infinite(spe)] <- 0;
-    spelog <- round(spelog, digits=4);
-    rownames(spelog) <- rownames(spe);
-    colnames(spelog) <- colnames(spe);
-    #class(spelog) <- "specificities";
-    #attr(spelog, "l.t") <- spe;
-    return(spelog);
-  }
+`specificities.lexicon` <- function(lexicon, sublexicon) {
+	lexicaltable <- lexiconsToLexicalTable(lexicon, sublexicon);
+ 	return(specificities(lexicaltable, NULL, NULL));
+}
 
 `lexiconsToLexicalTable` <- function(lexicon, sublexicon) {
 	if (! all(names(sublexicon) %in% names(lexicon))) 
@@ -175,8 +169,7 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
 }
 
 `specificities.lexicon.new` <- function(lexicon, sublexicon) {
-  lexicaltable <- lexiconsToLexicalTable(lexicon, sublexicon);
-  return(specificities(lexicaltable,NULL,NULL));
+	return(specificities.lexicon(lexicon, sublexicon))
 }
 
 `specificities.lexicon.probabilities` <-
@@ -222,17 +215,27 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
     
     specif <- double(length(lexicon));
     
-    specif[specif_negative] <- phyper (
+negativeScores <- phyper (
       whiteDrawn[specif_negative], 
       white[specif_negative], 
       black[specif_negative], 
       drawn
     );
-    
-    specif[specif_positive] <- phyper_bis (
+
+# by convention if phyper return 0.0f , then the probability will be -10
+negativeScores[negativeScores==0] = 10
+
+specif[specif_negative] <- negativeScores
+
+positiveScores <- phyper_bis (
       whiteDrawn[specif_positive], white[specif_positive], black[specif_positive], drawn
     );
-    
+
+# by convention if phyper return 0.0f , then the probability will be 10
+positiveScores[positiveScores==0] = 10
+
+specif[specif_positive] <- positiveScores
+
     names(specif) <- names(lexicon);
     
     return(specif);

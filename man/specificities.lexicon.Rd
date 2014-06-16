@@ -3,7 +3,7 @@
 \alias{specificities.lexicon}
 
 \title{
-specificities association score with two frequency lists.
+*OBSOLETE FUNCTION (see 'specificities.lexicon.new')* specificities association score with two frequency lists.
 }
 
 \description{

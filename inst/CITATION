@@ -22,3 +22,19 @@ pages = "389--398",
 url = "http://halshs.archives-ouvertes.fr/halshs-00549764/en",
 abstract = "This paper describes the rationale and design of an XML-TEI encoded corpora compatible analysis platform for text mining called TXM. The design of this platform is based on a synthesis of the best available algorithms in existing textometry software. It also relies on identifying the most relevant open-source technologies for processing textual resources encoded in XML and Unicode, for efficient full-text search on annotated corpora and for statistical data analysis. The architecture is based on a Java toolbox articulating a full-text search engine component with a statistical computing environment and with an original import environment able to process a large variety of data sources, including XML-TEI, and to apply embedded NLP tools to them. The platform is distributed as an open-source Eclipse project for developers and in the form of two demonstrator applications for end users: a standard application to install on a workstation and an online web application framework.",
 textVersion = "Heiden, S. (2010). The TXM Platform: Building Open-Source Textual Analysis Software Compatible with the TEI Encoding Scheme. In K. I. Ryo Otoguro (Ed.), 24th Pacific Asia Conference on Language, Information and Computation - PACLIC24 (p. 389-398). Institute for Digital Enhancement of Cognitive Development, Waseda University, Sendai, Japan.")
+
+bibentry(bibtype = "Article",
+title = "Sur la variabilit\'e de la fr\'equence des formes dans un corpus",
+author = person("Lafon, Pierre"),
+journal = "Mots",
+volume = "1",
+number = "1",
+pages = "127--165",
+year = "1980",
+ISSN = "0243-6450",
+url = "http://www.persee.fr/web/revues/home/prescript/article/mots_0243-6450_1980_num_1_1_1008",
+doi="10.3406/mots.1980.1008",
+language= "fre",
+publisher = "Presses de la Fondation nationale des sciences politiques, 27 Rue Saint Guillaume, 75341, Paris",
+abstract = "FORM FREQUENCY VARIABILITY IN A CORPUS P. L. is studying the distribution of the frequency of a word in a corpus divided into several fragments. Contrary to current work in this field, he proposes to use the formulae of the hypergeometric distribution, choosing the whole corpus as the norm of the fragments. These choices lead to the calculation of a probabilistic index valid for the whole range of frequencies. The calculation of this index for every form in the vocabulary enables us to define two complementary subsets of forms : that of specific forms and that of basic forms, and to attribute to each fragment its own lexical specifications.")
+

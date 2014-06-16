@@ -17,12 +17,12 @@ colors = c("blue", "red", "black", "grey")
 styles = c(1,2,3,4)
 widths = c(2,2,2,2)
 
-names = c("Lancelot", "Galaad", "Perceval", "Boort")  
+names = c("Lancelot", "[word=\"Galaad\"]", "Perceval", "Boort")  
 
 corpusname = "Graal"
 Xmin = 0
 Xmax = 119000
 
 #library("RSvgDevice");
-progression(positions, names, colors, styles, widths, corpusname, Xmin, Xmax, "true", structure, snames, "Progression graph title", 1000)
+progression(positions, names, colors, styles, widths, corpusname, Xmin, Xmax, "false", structure, snames, "Progression graph title", 1000)
 #dev.off();
