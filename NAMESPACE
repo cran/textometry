@@ -1,7 +1,12 @@
 import("grDevices")
 
 # file "R/specificities.R"
-export(specificities, specificities.probabilities, specificities.lexicon, specificities.lexicon.probabilities, specificities.lexicon.new)
+export(specificities,
+	   specificities.distribution.plot,
+	   specificities.lexicon,
+	   specificities.lexicon.new,
+	   specificities.probabilities,
+	   specificities.probabilities.vector)
 
 # file "R/progression.R"
 export(progression)

@@ -1,8 +1,9 @@
-#* Copyright © - 2008-2013 ANR Textométrie - http://textometrie.ens-lyon.fr
+#* Copyright © - 2008-2011 ANR Textométrie - http://textometrie.ens-lyon.fr
+#* Copyright © - 2012-2014 ENS de Lyon - http://textometrie.ens-lyon.fr
 #*
-#* This file is part of the TXM platform.
+#* This file is part of the TXM platform - http://sourceforge.net/projects/txm.
 #*
-#* The TXM platform is free software: you can redistribute it and/or modif y
+#* The TXM platform is free software: you can redistribute it and/or modify
 #* it under the terms of the GNU General Public License as published by
 #* the Free Software Foundation, either version 3 of the License, or
 #* (at your option) any later version.
@@ -18,26 +19,132 @@
 ## Sylvain Loiseau <sloiseau@u-paris10.fr>
 ## Lise Vaudor <lise.vaudor@ens-lyon.fr>
 ## Matthieu Decorde <matthieu.decorde@ens-lyon.fr>
+## Serge Heiden <slh@ens-lyon.fr>
 
-phyper_bis=function(v_a,v_b,v_c,v_d){
-  v_s2=rep(NA,length(v_a))
-  for (j in 1:length(v_a)){
-      a=v_a[j]
-      b=v_b[j]
-      c=v_c[j]
-      d=v_d
-      a_tmp=a#+1
-      s1=dhyper(a_tmp,b,c,d)
-      s_tmp=dhyper(a_tmp+1,b,c,d)
-      s2=s1+s_tmp
+# export TOC
+# phyper_right							Calculate specificity probabilities (call dhyper)
+# specificities                         Calculate Lexical Specificity Score (call specificities.probabilities)
+# specificities.banals					*PROTOTYPE* specificity lines between max and min banality score thresholds
+# specificities.distribution.plot       Display specificities probability distribution (call dhyper and specificities.probabilities.vector)
+# specificities.lexicon                 Specificities association score with two frequency list (call specificities)
+# specificities.lexicon.new             *OBSOLETE* (compatibility holder, see 'specificities.lexicon')
+# specificities.probabilities           Calculate specificity probabilities on lexical table (call specificities.probabilities.vector)
+# specificities.probabilities.vector	Calculate specificity probabilities on vector (call phyper and phyper_right)
+# specificities.top						*PROTOTYPE* top n max or min specificity lines
+
+`specificities.distribution.plot` <- function(x, F, t, T) {
+  
+  # x: observed number of A words
+  # F: total number of A
+  # t: size of part
+  # T: size of corpus
+  
+  # return : (px, mode, pfsum)
+  
+  # example: specificities.distribution.plot(11, 296, 1084, 61449)
+  
+  f=0:F
+  
+  mode=((F+1)*(t+1))/(T+2)
+
+  xRightLimit=(F/4)
+  if (xRightLimit < mode) xRightLimit = (F/4) + mode
+  rightDelta=xRightLimit/10
+  posType=4
+  
+  pf=dhyper(f, F, T-F, t)
+  pfsum=specificities.probabilities.vector(f, rep(F, F+1), rep(T, F+1), t)
+  
+  px <- pf[x+1]
+  pfsumx <- pfsum[x+1]
+
+  aY=max(pf)/3
+  
+  # window width around mode
+  thr <- 1.0e-20
+  i_min=0
+  i_max=0
+  for (i in mode:0) {
+    if (pf[i+1] < thr) {
+      i_min = i
+      break
+    }
+  }
+  for (i in mode:F) {
+    if (pf[i+1] < thr) {
+      i_max = i
+      break
+    }
+  }
+  w <- abs(i_max - i_min + 1)
+  
+  # x coordinates to display
+  x1 <- max(min(mode, x) - w, 0)
+  x2 <- min(max(mode, x) + w, F)
+  
+  # arrow and text coordinates
+  if (aY < px) {
+    obsY = aY*1.3
+  } else if (x < mode) {
+    obsY = aY*1.3
+  } else {
+    obsY = aY*0.7
+  }
+  
+  # plot(f, pfsum, xlab="f'", ylab="P", type="l", col="blue") c(x1, x2, 0, max(px))
+  plot(f, pf, ylab="Pspecif", type="l", col="green", xlim=c(x1, x2))
+  Axis(at=c(mode, x), side=1, labels=c(sprintf("%d", round(mode)), sprintf("%d", x)))
+
+  arrows(x+rightDelta, aY, mode, 0, length=0.1)   # mode arrow
+  arrows(x+rightDelta, obsY, x, px, length=0.1) # obs arrow
+  
+  smode <- sprintf("mode = %d", round(mode))
+  spf <- sprintf("p(f=%d) = %s\np(f >= %d) = %s", x, format.default(px, scientific = TRUE, digits = 4), x, format.default(pfsumx, scientific = TRUE, digits = 4))
+  
+  text(x+rightDelta, aY, smode, pos=posType, xpd=TRUE)
+  text(x+rightDelta, obsY, spf, pos=posType, xpd=TRUE)
+ 
+  title(sprintf("Distribution de probabilit\u00E9 de la sp\u00E9cificit\u00E9\nde param\u00E8tres F=%d, t=%d, T=%d,\nfr\u00E9quence observ\u00E9e = %d", F, t, T, x))
+  
+  # for cumulative distribution plot
+  # s2 <- sprintf("integral P(f' >= f)")
+  # legend("topright", c(str1, s2),lty = 1, col=c("green", "blue"), inset = .02, cex=0.9)
+  # legend("topright", c(str1), lty = 1, col=c("green"), inset = .02, cex=0.9)
+  
+  return(list(px=px, mode=mode, pfsum=pfsum))
+}
+
+println <- function(prefix, obj) {
+  cat(prefix)
+  print(obj)
+}
+
+phyper_right=function(v_white_drawn, v_num_white, v_num_black, num_drawn){
+
+# println("v_white_drawn: ", length(v_white_drawn))
+# println("v_num_white: ", length(v_num_white))
+# println("v_num_black: ", length(v_num_black))
+# println("num_drawn: ", num_drawn)
+  
+  v_s2=rep(NA,length(v_white_drawn))
+
+  for (j in 1:length(v_white_drawn)){
+    a=v_white_drawn[j]
+    b=v_num_white[j]
+    c=v_num_black[j]
+    d=num_drawn
+    a_tmp=a#+1
+    s1=dhyper(a_tmp, b, c, d)
+    s_tmp=dhyper(a_tmp+1, b, c, d)
+    s2=s1+s_tmp
+    a_tmp=a_tmp+1
+    while(log(s2)!=log(s1)){
+      s1=s2
       a_tmp=a_tmp+1
-      while(log(s2)!=log(s1)){
-        s1=s2
-        a_tmp=a_tmp+1
-        s_tmp=dhyper(a_tmp,b,c,d)
-        s2=s1+s_tmp
-      }
-      v_s2[j]=s2
+      s_tmp=dhyper(a_tmp, b, c, d)
+      s2=s1+s_tmp
+    }
+    v_s2[j]=s2
   }
   return(v_s2)
 }
@@ -45,8 +152,8 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
 # old function format for retro-compatibility
 `specificites` <-
   function(lexicaltable, types=NULL, parts=NULL) {
-	return(specificities(lexicaltable, types, parts));
-}
+    return(specificities(lexicaltable, types, parts));
+  }
 
 `specificities` <-
   function(lexicaltable, types=NULL, parts=NULL) {
@@ -71,8 +178,8 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
     # if (!is.numeric(lexicaltable)) stop("The lexical table must contain numeric values.");
     
     rowMargin <- rowSums(lexicaltable); # or "F" (the total frequency of all the types).
-    colMargin <- colSums(lexicaltable); # or "T" (the size of the parts).
-    F <- sum(lexicaltable);             # The grand total (number of tokens in the corpus).
+    colMargin <- colSums(lexicaltable); # or "t" (the size of the parts).
+    F <- sum(lexicaltable);             # or "T" (the grand total, number of tokens in the corpus).
     
     if (! is.null(types)) {      # Filter on tokens to be considered.
       if(is.character(types)) {  # convert the name of types given with "types" into row index numbers.
@@ -85,7 +192,7 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
         if (any(types < 1)) stop("The row index must be greater than 0.");
         if (max(types) > nrow(lexicaltable)) stop("Row index must be smaller than the number of rows.");
       }
-      lexicaltable <- lexicaltable[types,, drop = FALSE];
+      lexicaltable <- lexicaltable[types, , drop = FALSE];
       rowMargin <- rowMargin[types];
     }
     
@@ -112,150 +219,99 @@ phyper_bis=function(v_a,v_b,v_c,v_d){
     
     for(i in 1:ncol(lexicaltable)) {    # We proceed the whole lexical table by column (i.e. by part).
       
-      whiteDrawn <- lexicaltable[,i];  # The frequencies observed in this part for each type.
-      white <- rowMargin;     # The total frequencies in the corpus for each type.
-      black <- F-white;       # The total complement frequency in the corpus for each type.
-      drawn <- colMargin[i];  # The number of tokens in the part.
-      
-      
-      independance    <- (white * drawn) / F;         # The theoretic frequency of each type.
-      specif_negative <- whiteDrawn <  independance;  # index of observed frequencies below the theoretic frequencies.
-      specif_positive <- whiteDrawn >= independance;  # index of observed frequencies above the theoretic frequencies.
-      
-      negativeScores <- -phyper (
-        whiteDrawn[specif_negative], white[specif_negative], black[specif_negative], drawn
-      );
-negativeScores[negativeScores==0] = -10
-specif[specif_negative,i] <- negativeScores
-      
-      positiveScores <- phyper_bis (
-        whiteDrawn[specif_positive], white[specif_positive], black[specif_positive], drawn
-      );
-positiveScores[positiveScores==0] = 10
-specif[specif_positive,i] <- positiveScores
+      specif[,i] <- specificities.probabilities.vector(lexicaltable[,i], rowMargin, F, colMargin[i])
     }
-
+    
     colnames(specif) <- colnames(lexicaltable);
     rownames(specif) <- rownames(lexicaltable);
     
     return(specif);
   }
 
+`specificities.probabilities.vector` <- function(v_f, v_F, T, t) {
+  
+  v_whiteDrawn <- v_f;  # The frequencies observed in this part for each type.
+  v_white <- v_F;       # The total frequencies in the corpus for each type.
+  v_black <- T-v_white; # The total complement frequency in the corpus for each type.
+  drawn <- t;           # The number of tokens in the part.
+  
+  v_specif <- c()
+  
+  v_independance    <- (v_white * drawn) / T;         # The theoretic frequency of each type.
+  v_specif_negative <- v_whiteDrawn <  v_independance;  # index of observed frequencies below the theoretic frequencies.
+  v_specif_positive <- v_whiteDrawn >= v_independance;  # index of observed frequencies above the theoretic frequencies.
+  
+  v_negativeScores <- -phyper (
+    v_whiteDrawn[v_specif_negative], v_white[v_specif_negative], v_black[v_specif_negative], drawn
+  );
+  v_negativeScores[v_negativeScores==0] = -10
+  v_specif[v_specif_negative] <- v_negativeScores
+  
+  v_positiveScores <- phyper_right (
+    v_whiteDrawn[v_specif_positive], v_white[v_specif_positive], v_black[v_specif_positive], drawn
+  );
+  
+  v_positiveScores[v_positiveScores==0] = 10
+  v_specif[v_specif_positive] <- v_positiveScores
+  
+  return(v_specif)
+}
+
 `specificities.lexicon` <- function(lexicon, sublexicon) {
-	lexicaltable <- lexiconsToLexicalTable(lexicon, sublexicon);
- 	return(specificities(lexicaltable, NULL, NULL));
+  lexicaltable <- lexiconsToLexicalTable(lexicon, sublexicon);
+  return(specificities(lexicaltable, NULL, NULL));
 }
 
 `lexiconsToLexicalTable` <- function(lexicon, sublexicon) {
-	if (! all(names(sublexicon) %in% names(lexicon))) 
-	stop(paste(
-          sum(! (names(sublexicon) %in% names(lexicon))),
-          "types of the sublexicon not found in the lexicon: ",
-          )
-      ); 
-
-	sub <- numeric(length(lexicon));
-	names(sub) <- names(lexicon);
-	sub[names(sublexicon)] <- sublexicon;
-
-	complementary.lexicon <- c(lexicon- sub);
-	if (any(complementary.lexicon < 0)) 
-		stop("type cannot be more frequent in the sublexicon than in the lexicon");
-
-	lexicaltable <- matrix(c(sub, complementary.lexicon), ncol=2);
-	rownames(lexicaltable) <- names(lexicon);
-	colnames(lexicaltable) <- c("sublexicon", "complementary");
-	return(lexicaltable)
+  if (! all(names(sublexicon) %in% names(lexicon))) 
+    stop(paste(
+      sum(! (names(sublexicon) %in% names(lexicon))),
+      "types of the sublexicon not found in the lexicon: ",
+    )
+    ); 
+  
+  sub <- numeric(length(lexicon));
+  names(sub) <- names(lexicon);
+  sub[names(sublexicon)] <- sublexicon;
+  
+  complementary.lexicon <- c(lexicon- sub);
+  if (any(complementary.lexicon < 0)) 
+    stop("type cannot be more frequent in the sublexicon than in the lexicon");
+  
+  lexicaltable <- matrix(c(sub, complementary.lexicon), ncol=2);
+  rownames(lexicaltable) <- names(lexicon);
+  colnames(lexicaltable) <- c("sublexicon", "complementary");
+  return(lexicaltable)
 }
 
 `specificities.lexicon.new` <- function(lexicon, sublexicon) {
-	return(specificities.lexicon(lexicon, sublexicon))
+  return(specificities.lexicon(lexicon, sublexicon))
 }
 
-`specificities.lexicon.probabilities` <-
-  function(lexicon, sublexicon) {
-    if (!is.numeric(lexicon)) stop("The lexicon must contain numeric values.");
-    if (!is.numeric(sublexicon)) stop("The sublexicon must contain numeric values.");
-    if (is.null(names(lexicon))) stop("The lexicon must contain names.");
-    if (is.null(names(sublexicon))) stop("The sub lexicon must contain names.");
-    
-    if (! all(names(sublexicon) %in% names(lexicon)))
-      stop(
-        paste(
-          "Some requested types of the sublexicon are not known in the lexicon: ",
-          paste(names(sublexicon)[! (names(sublexicon) %in% names(lexicon))], collapse=" ")
-        )
-      ); 
-    
-    F <- sum(lexicon);
-    f <- sum(sublexicon);
-    
-    # complementary.lexicon <- c(lexicon[names(sublexicon)] - sublexicon, lexicon[!names(lexicon) %in% names(sublexicon)]);
-    
-    if (F < f) {
-      stop("The lexicon cannot be smaller than the sublexicon");
-    }
-    
-    whiteDrawn <- numeric(length(lexicon)); # The frequencies observed in this part for each type.
-    names(whiteDrawn) <- names(lexicon);
-    whiteDrawn[names(sublexicon)] <- sublexicon;
-    white <- lexicon; # The total frequencies in the corpus for each type.
-    black <- F-white;          # The total complement frequency in the corpus for each type.
-    drawn <- f;     # The number of tokens in the part.
-    
-    # print(whiteDrawn);
-    # print(white);
-    # print(black);
-    # print(drawn);
-    
-    independance    <- (white * drawn) / F;         # The theoretic frequency of each type.
-    
-    specif_negative <- whiteDrawn <  independance;  # index of observed frequencies below the theoretic frequencies.
-    specif_positive <- whiteDrawn >= independance;  # index of observed frequencies above the theoretic frequencies.
-    
-    specif <- double(length(lexicon));
-    
-negativeScores <- phyper (
-      whiteDrawn[specif_negative], 
-      white[specif_negative], 
-      black[specif_negative], 
-      drawn
-    );
-
-# by convention if phyper return 0.0f , then the probability will be -10
-negativeScores[negativeScores==0] = 10
-
-specif[specif_negative] <- negativeScores
-
-positiveScores <- phyper_bis (
-      whiteDrawn[specif_positive], white[specif_positive], black[specif_positive], drawn
-    );
-
-# by convention if phyper return 0.0f , then the probability will be 10
-positiveScores[positiveScores==0] = 10
-
-specif[specif_positive] <- positiveScores
-
-    names(specif) <- names(lexicon);
-    
-    return(specif);
+`specificities.top` <- function(specif, N=10) {
+  top <- c()
+  cols <- colnames(specif)
+  
+  for (i in 1:length(cols)) {
+    sorted <- sort(specif[, cols[i]], decreasing=TRUE)
+    top <- union(top, names(sorted[1:N]))
+    len <- length(sorted)
+    top <- union(top, names(sorted[len-N: len]))
   }
+  
+  return(top)
+}
 
-`SpecifTopN` <- function(Specif, N=10, file=NULL) {
-	symbol = Specif
-	top <- c()
-	cols <- colnames(symbol)
-
-	for (i in 1:length(cols)) {
-		sorted <- sort(symbol[, cols[i]], decreasing=TRUE, index.return= TRUE)$x
-		top <- union(top, names(sorted[1:N]))
-		top <- union(top, names(sorted[length(sorted) -N: length(sorted)]))  
-	}
-
-	symbol <- symbol[top,]
-	if (file != NULL) {
-		write.table(symbol, file)
-	}
+`specificities.banals` <- function(specif, score=1.0) {
+  banals <- rownames(specif)
+  cols <- colnames(specif)
+  for (i in 1:length(cols)) {
+    col <- specif[, i]
+    col <- col[col > score | col < -score]
+    banals <- setdiff(banals, names(col))
+  }
+  
+  return(banals)
 }
 
 #print.specificities(x, line=20, part=1, form=NULL, ...) {

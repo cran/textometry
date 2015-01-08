@@ -18,8 +18,11 @@ del : tests/.RData : tmp file
 del : tests/authors.xls
 del : tests/ca.R : doesn't pass R check because of `table <- read.table("clipboard");`
 
-TODO : 
-inst/CITATION : = how quoting TXM
+upd : inst/CITATION with TXM citation
+del : tests/authors
+
+TODO :
+add : package API
 
 SVN REPORT : 
 ...
