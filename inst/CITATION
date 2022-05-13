@@ -6,8 +6,8 @@ author = person("TXM Team"),
 organization = "ICAR Laboratory, Lyon University & CNRS",
 address = "Lyon, France",
 year = 2013,
-url = "http://textometrie.ens-lyon.fr/?lang=en",
-textVersion="TXM Team (2013). TXM Manual. ICAR Laboratory, Lyon University & CNRS, Lyon, France. URL http://textometrie.ens-lyon.fr/?lang=en.")
+url = "https://txm.gitpages.huma-num.fr/textometrie/?lang=en",
+textVersion="TXM Team (2013). TXM Manual. ICAR Laboratory, Lyon University & CNRS, Lyon, France. URL https://txm.gitpages.huma-num.fr/textometrie/?lang=en.")
 
 bibentry(bibtype = "InProceedings",
 title = "The TXM Platform: Building Open-Source Textual Analysis Software Compatible with the TEI Encoding Scheme",
