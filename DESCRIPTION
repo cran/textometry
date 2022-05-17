@@ -1,8 +1,8 @@
 Package: textometry
 Type: Package
 Title: Textual Data Analysis Package Used by the TXM Software
-Version: 0.1.5
-Date: 2015-01-08
+Version: 0.1.6
+Date: 2022-05-17
 Author: Sylvain Loiseau, Lise Vaudor, Matthieu Decorde, Serge Heiden
 Maintainer: Matthieu Decorde <matthieu.decorde@ens-lyon.fr>
 Description: Statistical exploration of textual corpora using several methods
@@ -12,8 +12,8 @@ Description: Statistical exploration of textual corpora using several methods
     Those methods are used in the TXM software.
 License: GPL (>= 3)
 Depends: R (>= 1.5.0)
-Packaged: 2022-05-13 09:08:51 UTC; mdecorde
+Packaged: 2022-05-17 13:50:03 UTC; mdecorde
 NeedsCompilation: no
 Repository: CRAN
-Date/Publication: 2022-05-13 21:40:02 UTC
+Date/Publication: 2022-05-17 15:10:02 UTC
 Encoding: UTF-8

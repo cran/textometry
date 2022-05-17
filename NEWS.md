@@ -1,1 +1,1 @@
-fix imports in the NAMESPACE file
+fix urls in the CITATION file

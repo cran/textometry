@@ -1,7 +1,7 @@
-#* Copyright © - 2008-2011 ANR Textométrie - http://textometrie.ens-lyon.fr
-#* Copyright © - 2012-2014 ENS de Lyon - http://textometrie.ens-lyon.fr
+#* Copyright © - 2008-2011 ANR Textométrie - https://textometrie.org
+#* Copyright © - 2012-2014 ENS de Lyon - https://textometrie.org
 #*
-#* This file is part of the TXM platform - http://sourceforge.net/projects/txm.
+#* This file is part of the TXM platform - https://sourceforge.net/projects/txm.
 #*
 #* The TXM platform is free software: you can redistribute it and/or modify
 #* it under the terms of the GNU General Public License as published by
@@ -14,7 +14,7 @@
 #* General Public License for more details.
 #*
 #* You should have received a copy of the GNU General Public License
-#* along with the TXM platform.  If not, see <http://www.gnu.org/licenses/>.
+#* along with the TXM platform.  If not, see <https://www.gnu.org/licenses>.
 
 ## Sylvain Loiseau <sloiseau@u-paris10.fr>
 ## Lise Vaudor <lise.vaudor@ens-lyon.fr>

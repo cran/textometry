@@ -44,7 +44,7 @@ giving the specificity score.
 
 \references{
   Lafon P. (1980) Sur la variabilit\'e de la fr\'e quence des formes dans un corpus,
-  Mots, 1, pp. 127--165. \url{http://www.persee.fr/web/revues/home/prescript/article/mots_0243-6450_1980_num_1_1_1008}
+  Mots, 1, pp. 127--165. \url{https://www.persee.fr/doc/mots_0243-6450_1980_num_1_1_1008}
 }
 
 \author{Matthieu Decorde, Serge Heiden, Sylvain Loiseau, Lise Vaudor}

@@ -25,11 +25,11 @@
 }
 
 \source{
-  BFM: \url{http://bfm.ens-lyon.fr}
+  BFM: \url{https://bfm.ens-lyon.fr}
 }
 
 \references{
-  BFM - Base de Fran\,cais M\'edi\'eval [En ligne]. Lyon : ENS de Lyon, Laboratoire ICAR, 2012, \url{http://bfm.ens-lyon.fr}.
+  BFM - Base de Fran\,cais M\'edi\'eval [En ligne]. Lyon : ENS de Lyon, Laboratoire ICAR, 2012, \url{https://bfm.ens-lyon.fr}.
 }
 
 \keyword{datasets}
